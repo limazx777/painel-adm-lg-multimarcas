@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Admin - GLUGLU</title>
+    <script>
+        // Verifica se o token existe antes de renderizar a página
+        if (!sessionStorage.getItem('token')) {
+            window.location.href = 'login.html';
+        }
+    </script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <script src="firebase-config.js"></script>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo">
+                <h2>IA STUDIO <span>ADMIN</span></h2>
+            </div>
+            <nav>
+                <a href="#" class="active"><i class="fas fa-box"></i> Produtos</a>
+                <button id="btnLogout"><i class="fas fa-sign-out-alt"></i> Sair</button>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header>
+                <div class="search-bar">
+                    <input type="text" id="searchProduct" placeholder="Buscar produtos (Roupas)...">
+                </div>
+                <button class="btn-primary" id="btnOpenModal">+ Novo Produto</button>
+            </header>
+
+            <section class="table-section">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Imagem</th>
+                            <th>Nome</th>
+                            <th>Categoria</th>
+                            <th>Preço</th>
+                            <th>Estoque</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productTableBody">
+                        <!-- Dinâmico -->
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal de Produto -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <h3 id="modalTitle">Adicionar Produto</h3>
+            <form id="productForm">
+                <input type="hidden" id="productId">
+                <div class="form-group">
+                    <label>Imagem</label>
+                    <input type="file" id="productImage" accept="image/*">
+                </div>
+                <input type="text" id="productName" placeholder="Nome do Produto" required>
+                <select id="productCategory">
+                    <option value="Roupas">Roupas</option>
+                </select>
+                <div id="variantsContainer">
+                    <!-- As variantes de cor serão adicionadas aqui dinamicamente -->
+                </div>
+                <button type="button" class="btn-secondary" id="btnAddVariant" style="margin-bottom: 1rem; width: 100%;">+ Adicionar Cor</button>
+                <div class="form-row">
+                    <input type="number" id="productPrice" placeholder="Preço (R$)" step="0.01" required>
+                    <input type="number" id="productStock" placeholder="Estoque Total" readonly title="Calculado automaticamente">
+                </div>
+                <textarea id="productDesc" placeholder="Descrição"></textarea>
+                <div class="form-actions">
+                    <button type="submit" class="btn-save">Salvar</button>
+                    <button type="button" class="btn-cancel" id="btnCloseModal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        // Lógica de Logout
+        document.getElementById('btnLogout').addEventListener('click', () => {
+            sessionStorage.removeItem('token');
+            sessionStorage.removeItem('role');
+            window.location.href = 'login.html';
+        });
+    </script>
+    <!-- Definimos como type="module" para usar os novos imports do Firebase -->
+    <script type="module" src="app.js"></script>
+</body>
+</html>
